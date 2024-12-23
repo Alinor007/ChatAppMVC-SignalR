@@ -1,0 +1,13 @@
+﻿@model ChatITN100.Models.viewModels.ChatRoomViewModel
+
+<h1>Welcome, @Model.LoggedInUserName</h1>
+<h3>Chat Rooms</h3>
+
+<ul>
+    @foreach (var room in Model.GetRooms)
+    {
+        <li>
+            <a href="@Url.Action("Room", "Chat", new { id = room.Id })">@room.Name</a>
+        </li>
+    }
+</ul>

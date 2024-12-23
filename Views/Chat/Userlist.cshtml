@@ -1,0 +1,129 @@
+﻿@model IEnumerable<ChatITN100.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Userlist";
+}
+
+<style>
+    .text-success {
+        color: green !important;
+    }
+
+    .text-muted {
+        color: gray !important;
+    }
+    /* Container for the user list */
+    .user-list-container {
+        width: 20rem; /* Adjust as needed */
+        background-color: white;
+        border-right: 1px solid #90e0ef;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Form styling for each user */
+    .user-form {
+        margin: 0; /* Remove default margins */
+    }
+
+    /* User button */
+    .user-button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #e5e7eb;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        text-align: left;
+    }
+
+        /* Hover effect for user button */
+        .user-button:hover {
+            background-color: #48cae4;
+            border-color: #d1d5db;
+        }
+
+    /* Avatar styling */
+    .user-avatar {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+
+    /* User details */
+    .user-details {
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 600;
+    }
+
+    .user-status {
+        font-size: 0.875rem;
+        color: #6b7280; /* Gray color */
+    }
+
+</style>
+
+<div class="container my-4">
+    <div class="row">
+        <!-- User List Section -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="background-color:#caf0f8;">
+                    <h2 class="h5 mb-0" style="color:#03045e;">User List</h2>
+                </div>
+                <div class="card-body">
+                    @foreach (var user in Model)
+                    {
+                        <form asp-action="PrivateRoom" method="post" class="mb-3">
+                            <input type="hidden" name="otherUserId" value="@user.Id" />
+                            <button type="submit" class="btn btn-outline-secondary w-100 d-flex align-items-center gap-2">
+                                <span class="badge bg-secondary rounded-circle text-white" style="width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center;">
+                                    @user.UserName.Substring(0, 1)
+                                </span>
+                                <div>
+                                    <span class="fw-bold">@user.UserName</span><br />
+                                    <small id="status-@user.UserName" class="text-muted">Offline</small> <!-- Status will change dynamically -->
+                                </div>
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Room Section -->
+        <div class="col-md-8">
+            <div class="card " style="background-color:#caf0f8;color:#03045e;">
+                <!-- Chat Room Header -->
+                <div class="card-header card-heades-bg text-white">
+                    <h2 class="h5 mb-0"></h2>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="card-body chat-messages" style="max-height: 400px; overflow-y: auto;">
+                    <!-- Chat Room Header -->
+                    <p>Select a chat to start a conversation</p>
+                </div>
+
+                <!-- Send Message Form -->
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

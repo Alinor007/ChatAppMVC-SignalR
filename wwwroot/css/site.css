@@ -1,0 +1,78 @@
+html {
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background: #f5fdff;
+    font-family: 'Roboto', sans-serif;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+CenteredContainer {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+}
+
+.CenteredContainer Form {
+    background: linear-gradient(to left,#99e6ff,#ccf2ff);
+    padding: 3em;
+    border-radius: 20px;
+}
+
+    .CenteredContainer Form a {
+        text-decoration: none;
+        color: #0594db;
+        font-size: 15px;
+    }
+
+        .CenteredContainer Form a:hover {
+            color: #7ad3ff;
+        }
+
+    .CenteredContainer Form input {
+        border-radius: 20px;
+    }
+
+    .CenteredContainer Form btn {
+        width: 150px;
+        font-size: 1em;
+    }
+/*   .CenteredContainer Form:hover{
+       margin:8px;
+    }
+
+.CenteredContainer a,input:focus,submit:focus,button:focus{
+    outline:none;
+    margin:2px;
+
+}*/
+
+

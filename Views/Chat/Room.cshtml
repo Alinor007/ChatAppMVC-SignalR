@@ -1,0 +1,328 @@
+﻿@model ChatITN100.Models.viewModels.ChatRoomViewModel
+
+<head>
+   <style>
+       
+
+        .status-bubble {
+            position: absolute;
+            bottom: 0%;
+            right: 4%;
+            width: 20px;
+            height: 20px;
+            background-color: #4CD964;
+            border: 2px solid white;
+        }
+
+         .text-success {
+        color: green !important;
+    }
+    .text-muted {
+        color: gray !important;
+    }
+       .chat-room-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 20px auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            background-color: #caf0f8;
+            color: #03045e;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .chat-messages {
+            padding: 10px;
+        }
+
+        .chat-messages .your-message {
+            text-align: right;
+        }
+
+        .chat-messages .your-message p {
+            margin-left: 10rem;
+            background-color: #90e0ef;
+            border-radius: 20px;
+            padding: 12px;
+            display: inline-block;
+        }
+
+          .chat-messages .your-message img {
+                margin-left: 25rem;
+                margin-bottom: 3px;
+            }
+        .chat-messages .other-message {
+            text-align: left;
+        }
+
+        .chat-messages .other-message p {
+            margin-right: 10rem;
+            background-color: #e9ecef;
+            border-radius: 20px;
+            padding: 12px;
+            display: inline-block;
+        }
+        .chat-messages .other-message img {
+            margin-right: 1rem;
+            margin-bottom:3px;
+        
+        }
+
+        .timestamp {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+            display: block;
+            text-align: center;
+        }
+
+        #chat-form {
+            position: sticky;
+            bottom: 0;
+            background-color: #fff;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #chat-form input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            width: 25rem;
+        }
+          #chat-form label {
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        #chat-form label:hover {
+            background-color: #023e8a;
+        }
+
+
+        #chat-form button {
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #chat-form button:hover {
+            background-color: #023e8a;
+        }
+
+        
+        
+   </style>
+</head>
+
+<div class="container mt-5 mb-4">
+    <div class="card-header d-flex justify-content-start">
+         @foreach (var user in Model.user)
+        {
+             <div class="mx-2">
+                <div style="position: relative;">
+                 <span class="badge bg-secondary rounded-circle text-white" style="width: 3rem; height: 3rem; font-size:24px; justify-content:center; align-content:center">
+                             @user.name.Substring(0, 1)
+                    
+                  </span>
+                     <span class="status-bubble rounded-circle shadow-sm"></span>
+                </div>
+            </div>
+        }
+    </div>
+    
+     <div class="row">
+        <div class="col-md-4 mt-4">
+            <div class="card">
+                <div class="card-header ">Friend List</div>
+                <div class="card-body">
+                    @foreach (var user in Model.user)
+                    {
+                        <form asp-action="PrivateRoom" method="post" class="mb-3">
+                            <input type="hidden" name="otherUserId" value="@user.Id" />
+                            <button type="submit" class="btn btn-outline-secondary w-100 d-flex align-items-center gap-2">
+                                <span class="badge bg-secondary rounded-circle text-white" style="width: 2rem; height: 2rem; font-size:medium;">
+                                    @user.UserName.Substring(0, 1)
+                                </span>
+                                <div>
+                                    <span class="fw-bold">@user.name</span><br />
+                                    <small id="online-status-@user.UserName" class="text-muted">Offline</small>
+                                </div>
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8 mt-1">
+            <div class="card chat-room-card">
+                <div class="card-header">@Model.OtherUserName</div>
+                <div id="chatMessages" class="card-body chat-messages">
+                    @foreach (var message in Model.Messages)
+                    {
+                        <span class="timestamp">@message.CreatedAt.ToString("g")</span>
+                        <div class="message @(message.Sender == Model.LoggedInUserName ? "your-message" : "other-message")">
+                            <strong>@(message.Sender == Model.LoggedInUserName ? "" : message.Sender)</strong>
+                            <div class="list-group list-group-flush">
+                                <p class="list-group-item">@message.Payload</p>
+                                @if (!string.IsNullOrEmpty(message.FileUrl))
+                                {
+                                    <img src="@message.FileUrl" alt="attachment" style="border-radius: 20px;" class="mb-1 list-group-item h-25 w-25" />
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <div id="file-preview" class="mb-2"></div>
+                        
+                <div class="d-flex">
+                    <!-- File Preview Section -->
+                    <form id="chat-form" asp-action="SendMessage" asp-controller="Chat" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="roomId" value="@Model.Room.Id" />
+                        <input type="text" name="payload" placeholder="Type a message" required />
+
+                        <!-- Hidden File Input -->
+                        <input type="file" name="file" id="file-input" class="d-none" />
+
+                        <!-- Paperclip Icon Trigger -->
+                        <label for="file-input" class="cursor-pointer">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </label>
+                        
+
+                        <button type="submit">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+<script>
+    const fileInput = document.getElementById('file-input');
+    const previewContainer = document.getElementById('file-preview');
+
+    fileInput.addEventListener('change', function () {
+        previewContainer.innerHTML = '';  // Clear previous previews
+        const file = this.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            if (file.type.startsWith('image/')) {
+                // Preview for images
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = file.name;
+                    img.style.maxWidth = '8rem';
+                    img.style.marginTop = '10px';
+                    previewContainer.appendChild(img);
+                };
+            } else {
+                // Preview for non-image files (name only)
+                const fileInfo = document.createElement('div');
+                fileInfo.textContent = `Selected: ${file.name}`;
+                fileInfo.style.marginTop = '10px';
+                previewContainer.appendChild(fileInfo);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+</script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chathub")
+        .build();
+
+   
+    connection.start().then(() => {
+        connection.invoke("JoinRoom", "@Model.Room.Id");
+    });
+    connection.on("UpdateUserStatus", (userName, status) => {
+        const statusText = document.getElementById(`online-status-${userName}`);
+        if (statusText) {
+            statusText.innerText = status;
+            statusText.className = status === "Online" ? "text-success" : "text-muted";
+        }
+    });
+  
+    connection.on("ReceiveMessage", (sender, payload, fileUrl, createdAt) => {
+        const messagesDiv = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+
+        // Add conditional classes for alignment
+        messageDiv.className = sender === "You" ? "message your-message" : "message other-message";
+
+        // Create timestamp element
+        const timestamp = document.createElement("span");
+        timestamp.className = "timestamp";
+        const date = new Date(createdAt);
+        timestamp.textContent = isNaN(date.getTime()) ? '' : date.toLocaleString();
+
+        // Add sender's name for received messages (not your own)
+        if (sender !== "You") {
+            const senderName = document.createElement("strong");
+            senderName.textContent = sender;
+            messageDiv.appendChild(senderName);
+        }
+
+        // Create message payload (text)
+        const messagePayload = document.createElement("p");
+        messagePayload.textContent = payload;
+        messageDiv.appendChild(messagePayload);
+
+        // Append file if available
+        if (fileUrl) {
+            const attachment = document.createElement("img");
+            attachment.src = fileUrl;
+            attachment.alt = "attachment";
+            attachment.style.maxHeight = "100px";
+            messageDiv.appendChild(attachment);
+        }
+
+        // Append timestamp at the end
+        messageDiv.appendChild(timestamp);
+
+        // Append the new message to chat container
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+</script>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ChatITN100.Models.Message>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               Sender
+            </th>
+            <th>
+                Message
+            </th>
+            <th>
+                OrderId
+            </th>
+            <th>
+                File
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Room
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Payload)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+               <img src="~/Image/@item.FileUrl" class="card-title card-img-top rounded-circle mx-auto d-block mt-1 " alt="Employee Image" style="width: 100px; height: 100px; object-fit: cover; object-position: center center;">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

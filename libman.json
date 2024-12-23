@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/lib/microsoft/signalr/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "font-awesome@6.7.2",
+      "destination": "wwwroot/lib/font-awesome/"
+    }
+  ]
+}
